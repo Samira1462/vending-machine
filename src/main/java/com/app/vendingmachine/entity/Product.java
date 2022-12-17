@@ -1,12 +1,15 @@
 package com.app.vendingmachine.entity;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 @Entity
-public class Products {
+@Table(name="TBL_PRODUCT")
+public class Product{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @GenericGenerator(name = "incremental_id", strategy = "increment")
+    @Column(name = "ID", nullable = false, unique = true, updatable = false)
     private Long id;
 
     private Integer amountAvailable;

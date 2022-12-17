@@ -3,8 +3,8 @@
 ## Technology Stack
 
 * Java 17
-* Spring boot
-* Spring security
+* Spring boot 2.7.6
+* Spring security 6
 * Jpa
 * Maven
 
@@ -28,6 +28,16 @@ should only accept 5, 10, 20, 50 and 100 cent coins
 - Implement /reset endpoint so users with a “buyer” role can reset their deposit back to 0
 - Take time to think about possible edge cases and access issues that should be solved
 
+## Prerequisite
+
+### DATABASE Console
+http://localhost:9000/
+
+```shell
+INSERT INTO roles(roleName) VALUES('SELLER');
+INSERT INTO roles(roleName) VALUES('BUYER');
+```
+
 
 ## Build
 
@@ -39,6 +49,8 @@ mvn test
 ## Install
 
 ```shell
+docker-compose up
+
 mvn spring-boot:run
 ```
 
