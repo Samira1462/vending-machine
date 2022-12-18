@@ -1,34 +1,28 @@
 package com.app.vendingmachine.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class SignupRequest {
-
+    @NonNull
+    @NotBlank(message = "{username.notblank}")
     private String username;
+
+    @NonNull
+    @NotBlank(message = "{password.notblank}")
     private String password;
+
+    @NonNull
     private Set<String> role;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<String> getRole() {
-        return role;
-    }
-
-    public void setRole(Set<String> role) {
-        this.role = role;
-    }
 }

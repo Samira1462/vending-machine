@@ -21,19 +21,20 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-
 @Configuration
 @EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
         prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
+    @Autowired
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -63,23 +64,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-/*        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("api/auth/**").permitAll()
-                .requestMatchers("api/user/register").permitAll()
-                .requestMatchers("/api/test/**").permitAll()
-                .anyRequest().authenticated();*/
 
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
+                .authorizeRequests().antMatchers("/auth/**").permitAll()
+                .antMatchers("/user/register").permitAll()
                 .anyRequest().authenticated();
-
-/*        http.cors().and().csrf().disable();
-        http.authorizeRequests().antMatchers("/api/auth/**").permitAll();*/
 
         http.authenticationProvider(authenticationProvider());
 
@@ -87,9 +78,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-/*
-                .antMatchers("api/user/register").permitAll()
-                .antMatchers("/api/test/**").permitAll()*/
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

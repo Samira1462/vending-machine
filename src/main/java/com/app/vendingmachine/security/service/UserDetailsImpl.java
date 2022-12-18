@@ -12,14 +12,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class UserDetailsImpl implements UserDetails {
-    private Long id;
+    private final Long id;
 
-    private String username;
+    private final String username;
 
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String password,
                            Collection<? extends GrantedAuthority> authorities) {
