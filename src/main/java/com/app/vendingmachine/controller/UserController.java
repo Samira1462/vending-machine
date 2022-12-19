@@ -98,7 +98,7 @@ public class UserController {
                 .body("Deposit for buyer user is reset");
     }
 
-    @PostMapping(path = "/buy", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/buy/{productId}/{amount}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<BuyResponse> buy(@PathVariable("productId")Long productId, @PathVariable("amount") Long amount)
             throws AccessDeniedException, ObjectNotFoundException, BadRequestException {
 
