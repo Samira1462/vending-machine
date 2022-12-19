@@ -1,5 +1,7 @@
 package com.app.vendingmachine.entity;
 
+import com.app.vendingmachine.exception.BadRequestException;
+import com.app.vendingmachine.utils.CommonUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,9 +14,9 @@ public class Product{
     @Column(name = "ID", nullable = false, unique = true, updatable = false)
     private Long id;
 
-    private Integer amountAvailable;
+    private Long amountAvailable;
 
-    private Integer cost;
+    private Long cost;
     private String productName;
 
 
@@ -26,20 +28,21 @@ public class Product{
         return seller;
     }
 
-    public Integer getAmountAvailable() {
+    public Long getAmountAvailable() {
         return amountAvailable;
     }
 
-    public void setAmountAvailable(Integer amountAvailable) {
+    public void setAmountAvailable(Long amountAvailable) {
         this.amountAvailable = amountAvailable;
     }
 
-    public Integer getCost() {
+    public Long getCost() {
         return cost;
     }
 
-    public void setCost(Integer cost) {
-        this.cost = cost;
+    public void setCost(Long cost) throws BadRequestException {
+        if(CommonUtils.costValidation(cost))
+            this.cost = cost;
     }
 
     public String getProductName() {

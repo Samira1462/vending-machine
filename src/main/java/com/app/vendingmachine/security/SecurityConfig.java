@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
                 .antMatchers("/user/register").permitAll()
+                .antMatchers("/user/register").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

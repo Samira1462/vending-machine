@@ -2,12 +2,11 @@ package com.app.vendingmachine.controller;
 
 import com.app.vendingmachine.dto.JwtResponse;
 import com.app.vendingmachine.dto.Login;
-import com.app.vendingmachine.entity.User;
+import com.app.vendingmachine.exception.ObjectNotFoundException;
 import com.app.vendingmachine.security.jwt.JwtTokenProvider;
 import com.app.vendingmachine.security.service.UserDetailsImpl;
 import com.app.vendingmachine.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,11 +38,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/signin", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login) {
-
-        User byUsername = userService.findByUsername(login.getUsername()).get();
-        if (byUsername.isActive())
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already logged in");
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login login) throws ObjectNotFoundException {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
