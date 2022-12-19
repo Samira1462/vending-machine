@@ -1,5 +1,6 @@
 package com.app.vendingmachine.dto;
 
+import com.app.vendingmachine.entity.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,5 @@ public class SignupRequest {
     private String password;
 
     @NonNull
-    private Set<String> role;
+    private Set<UserRole> role;
 }

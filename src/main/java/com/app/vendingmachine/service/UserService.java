@@ -6,6 +6,7 @@ import com.app.vendingmachine.entity.User;
 import com.app.vendingmachine.entity.UserRole;
 import com.app.vendingmachine.repository.RoleRepository;
 import com.app.vendingmachine.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -50,26 +52,28 @@ public class UserService {
     public User add(SignupRequest signupRequest) {
         User user = new User(signupRequest.getUsername(), passwordEncoder.encode(signupRequest.getPassword()));
 
-        Set<String> strRoles = signupRequest.getRole();
+        Set<UserRole> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByRoleName(UserRole.BUYER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                if (role.equals("SELLER")) {
+        if (strRoles.size() == 0) {
+            throw new RuntimeException("Error: Role is Empty.");
+        }
+
+        strRoles.forEach(role -> {
+            switch (role) {
+                case SELLER -> {
                     Role adminRole = roleRepository.findByRoleName(UserRole.SELLER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(adminRole);
-                } else {
-                    Role userRole = roleRepository.findByRoleName(UserRole.BUYER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(userRole);
                 }
-            });
-        }
+                case BUYER -> {
+                    Role modRole = roleRepository.findByRoleName(UserRole.BUYER)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(modRole);
+                }
+                default -> log.info("info:set Role is set.");
+            }
+        });
 
         user.setRoles(roles);
         return userRepository.save(user);
